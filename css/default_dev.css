@@ -48,8 +48,8 @@ body {
 #loveu{
 	padding: 5px;
 	font-size: 22px;
-	margin-top: 80px;
-	margin-right: 120px;
+	margin-top: 0;
+    margin-right: 140px;
 	text-align: right;
 	display: none;
 }
