@@ -87,7 +87,10 @@ function startHeartAnimation() {
 // jQuery typewriter plugin
 (function (a) {
     a.fn.typewriter = function () {
-        this.each(function () {
+        $('#clickthis').hide()
+         var totalElements = this.length;
+
+        this.each(function (index) {
             var d = a(this),
                 c = d.html(),
                 b = 0;
@@ -107,7 +110,14 @@ function startHeartAnimation() {
 
                 if (b >= c.length) {
                     clearInterval(e);
+
+                    // Check if this is the last element
+                    if (index === totalElements - 1) {
+                        $('#clickthis').fadeIn(2000);
+                    }
                 }
+
+                
             }, 75);
         });
 

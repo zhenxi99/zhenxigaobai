@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>我们的故事</title>
+<style>
+/* ... (Your existing CSS, adjusted slightly for the video element) ... */
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: Verdana, sans-serif;
+  margin: 0;
+}
+.slideshow-container {
+  max-width: 400px;
+  height: 90vh;
+  position: relative;
+  margin: auto;
+  overflow: hidden;
+  background-color: black;
+}
+.mySlides {
+  display: none;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+img, video {
+  vertical-align: middle;
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+.text {
+  color: #f2f2f2;
+  font-size: 15px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.dot {
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+  cursor: pointer;
+  z-index: 1;
+}
+#dots-container {
+  text-align: center;
+  margin-top: 10px;
+}
+.active {
+  background-color: #717171;
+}
+.fade {
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+#final-message-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  color: white;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1s ease-in-out;
+  z-index: 2;
+}
+
+#final-message-container.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+#our-story-text, #tobe-continued-text {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin: 10px;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+#tobe-continued-text {
+  font-size: 18px;
+  font-weight: normal;
+}
+
+#our-story-text.visible, #tobe-continued-text.visible {
+  opacity: 1;
+}
+@keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+@media only screen and (max-width: 300px) {
+  .text {
+    font-size: 11px;
+  }
+  .slideshow-container {
+    max-width: none;
+    max-height: none;
+  }
+}
+</style>
+</head>
+<body>
+<div class="slideshow-container">
+  <div class="mySlides fade">
+    <div class="numbertext" id="slide-number"></div>
+    <div id="media-container" style="width:100%; height:100%;"></div>
+    <div class="text" id="slide-caption"></div>
+  </div>
+</div>
+<br>
+
+<div style="text-align:center" id="dots-container"></div>
+
+<div id="final-message-container">
+  <div id="our-story-text">我们的故事...</div>
+  <div id="tobe-continued-text">还在进行中...</div>
+</div>
+
+<script>
+// Data for the slides
+const slidesData = [
+  { img: "img/20241022_190559.mp4", caption: "20241022_190559", type: "video" },
+  { img: "img/IMG-20241130-WA0039.jpg", caption: "IMG-20241130-WA0039", type: "image" },
+  { img: "img\\20241022_192438.jpg", caption: "20241022_192438" },
+  { img: "img\\20241130_061225.jpg", caption: "20241130_061225" },
+  { img: "img\\20241130_100748.jpg", caption: "20241130_100748" },
+  { img: "img\\20241130_101257.jpg", caption: "20241130_101257" },
+  { img: "img\\20241130_101300.jpg", caption: "20241130_101300" },
+  { img: "img\\20241130_101330.jpg", caption: "20241130_101330" },
+  { img: "img\\20241130_104520.jpg", caption: "20241130_104520" },
+  { img: "img\\20241130_104522.jpg", caption: "20241130_104522" },
+  { img: "img\\20241130_114952.jpg", caption: "20241130_114952" },
+  { img: "img\\20241130_114955.jpg", caption: "20241130_114955" },
+  { img: "img\\20241228_110857.jpg", caption: "20241228_110857" },
+  { img: "img\\20241228_110914.jpg", caption: "20241228_110914" },
+  { img: "img\\20250419_190204.jpg", caption: "20250419_190204" },
+  { img: "img\\20250419_190206.jpg", caption: "20250419_190206" },
+  { img: "img\\20250508_130630.jpg", caption: "20250508_130630" },
+  { img: "img\\20250614_144547.jpg", caption: "20250614_144547" },
+  { img: "img\\20250614_144619.jpg", caption: "20250614_144619" },
+  { img: "img\\20250615_105839.jpg", caption: "20250615_105839" },
+  { img: "img\\20250615_113054.jpg", caption: "20250615_113054" },
+  { img: "img\\20250701_134810.jpeg", caption: "20250701_134810" },
+  { img: "img\\20250712_095902.jpeg", caption: "20250712_095902" },
+  { img: "img\\20250712_102601.jpeg", caption: "20250712_102601" },
+  { img: "img\\20250712_103323.jpeg", caption: "20250712_103323" },
+  { img: "img\\20250712_103346.jpeg", caption: "20250712_103346" },
+  { img: "img\\20250712_103352.jpeg", caption: "20250712_103352" },
+  { img: "img\\20250712_161624.jpeg", caption: "20250712_161624" },
+  { img: "img\\20250712_161643.jpeg", caption: "20250712_161643" },
+  { img: "img\\20250712_161654.jpeg", caption: "20250712_161654" },
+  { img: "img\\20250712_161707.jpeg", caption: "20250712_161707" },
+  { img: "img\\20250712_171703.jpeg", caption: "20250712_171703" },
+  { img: "img\\20250712_171953.jpeg", caption: "20250712_171953" },
+  { img: "img\\20250712_171959.jpeg", caption: "20250712_171959" },
+  { img: "img\\20250712_172001.jpeg", caption: "20250712_172001" },
+  { img: "img\\20250712_172110.jpeg", caption: "20250712_172110" },
+  { img: "img\\20250712_172118.jpeg", caption: "20250712_172118" },
+  { img: "img\\20250712_172339.jpeg", caption: "20250712_172339" },
+  { img: "img\\20250712_172341.jpeg", caption: "20250712_172341" },
+  { img: "img\\20250712_172449.jpeg", caption: "20250712_172449" },
+  { img: "img\\20250712_172644.jpeg", caption: "20250712_172644" },
+  { img: "img\\20250807_202429.jpeg", caption: "20250807_202429" },
+  { img: "img\\20250807_204847.jpeg", caption: "20250807_204847" },
+  { img: "img\\20250807_204853.jpeg", caption: "20250807_204853" },
+  { img: "img\\20250807_204857.jpeg", caption: "20250807_204857" },
+  { img: "img\\20250808_233828.jpeg", caption: "20250808_233828" },
+  { img: "img\\20250808_233836.jpeg", caption: "20250808_233836" },
+  { img: "img\\20250823_141727.jpeg", caption: "20250823_141727" },
+  { img: "img\\20250912_201611.jpeg", caption: "20250912_201611" }
+];
+
+
+let slideIndex = 0;
+let timeoutId;
+const slideshowContainer = document.querySelector(".slideshow-container");
+const mediaContainer = document.getElementById("media-container");
+const slideCaption = document.getElementById("slide-caption");
+const slideNumber = document.getElementById("slide-number");
+const dotsContainer = document.getElementById("dots-container");
+const finalMessageContainer = document.getElementById("final-message-container");
+const totalSlides = slidesData.length;
+
+// For swipe functionality
+let touchstartX = 0;
+let touchendX = 0;
+
+// Create dots dynamically
+for (let i = 0; i < totalSlides; i++) {
+  const dot = document.createElement("span");
+  dot.classList.add("dot");
+  dot.addEventListener("click", () => currentSlide(i + 1));
+  dotsContainer.appendChild(dot);
+}
+
+// Function to move to the next slide
+function plusSlides() {
+  slideIndex++;
+  if (slideIndex > totalSlides) {
+    showFinalMessage();
+  } else {
+    showSlides();
+  }
+}
+
+// Function to move to the previous slide
+function minusSlides() {
+  clearTimeout(timeoutId);
+  slideIndex--;
+  // The showSlides logic handles looping, but we set index here
+  if (slideIndex < 1) {
+    slideIndex = totalSlides;
+  }
+  showSlides();
+}
+
+// Handle touch start event
+slideshowContainer.addEventListener('touchstart', e => {
+  touchstartX = e.changedTouches[0].screenX;
+});
+
+// Handle touch end event
+slideshowContainer.addEventListener('touchend', e => {
+  touchendX = e.changedTouches[0].screenX;
+  handleGesture();
+});
+
+// Logic to determine swipe direction
+function handleGesture() {
+  const swipeThreshold = 50; // Minimum distance for a swipe to be registered
+  const swipeDistance = touchendX - touchstartX;
+  
+  // If swipe is to the right
+  if (swipeDistance > swipeThreshold) {
+    minusSlides();
+  }
+  // If swipe is to the left
+  if (swipeDistance < -swipeThreshold) {
+    plusSlides();
+  }
+}
+
+function showSlides() {
+
+   const dots = document.getElementsByClassName("dot");
+
+  clearTimeout(timeoutId);
+
+  if (slidesData.length === 0) {
+    slideshowContainer.style.display = "none";
+    return;
+  }
+  
+  // Handle slide looping for images, ensuring it doesn't wrap back when finished
+  if (slideIndex > totalSlides) {
+    showFinalMessage();
+    return;
+  }
+  
+  const currentSlideData = slidesData[slideIndex - 1];
+  mediaContainer.innerHTML = ''; // Clear previous content
+
+  // Logic to handle video playback
+  if (currentSlideData.type === "video") {
+    const video = document.createElement("video");
+    video.src = currentSlideData.img.replace(/\\/g, '/');
+    video.autoplay = true;
+    video.muted = true;
+    video.controls = false;
+    video.addEventListener("ended", () => {
+      // Advance to the next slide automatically
+      plusSlides();
+    });
+    mediaContainer.appendChild(video);
+  } else {
+    const img = document.createElement("img");
+    img.src = currentSlideData.img.replace(/\\/g, '/');
+    mediaContainer.appendChild(img);
+    // Set the timer for image slides
+    timeoutId = setTimeout(plusSlides, 2000);
+  }
+
+  // Update text and dots
+  slideCaption.innerText = currentSlideData.caption;
+  slideNumber.innerText = `${slideIndex} / ${totalSlides}`;
+  slideshowContainer.style.display = "flex";
+  
+  for (let i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  dots[slideIndex - 1].className += " active";
+}
+
+// Function to navigate with dots
+function currentSlide(n) {
+  clearTimeout(timeoutId);
+  slideIndex = n;
+  showSlides();
+}
+
+// Initial call to start the slideshow
+if (slidesData[0].type === "video") {
+  slideIndex = 1; // Start with the first item
+  showSlides();
+} else {
+  plusSlides(); // Start with the first image if no video
+}
+
+
+// Function to handle the final message fade-in
+function showFinalMessage() {
+  const finalContainer = document.getElementById("final-message-container");
+  const ourStory = document.getElementById("our-story-text");
+  const continued = document.getElementById("tobe-continued-text");
+
+  // Fade out the slideshow container
+  slideshowContainer.style.opacity = 0;
+  setTimeout(() => {
+    slideshowContainer.style.display = "none";
+    dotsContainer.style.display = "none";
+    finalContainer.classList.add("visible");
+    
+    // Fade in "Our Story" after a delay
+    setTimeout(() => {
+      ourStory.classList.add("visible");
+      
+      // Fade in "to be continued" after "Our Story"
+      setTimeout(() => {
+        continued.classList.add("visible");
+      }, 2000); // Delay for "to be continued"
+    }, 1000); // Delay for "Our Story"
+  }, 0); // Delay for slideshow fade out
+}
+
+
+// Function to restart the slideshow
+function restartSlideshow() {
+  // Reset slideshow state
+  clearTimeout(timeoutId);
+  videoLoopCount = 0;
+  slideIndex = 1;
+  
+  // Hide the final message container
+  finalMessageContainer.classList.remove("visible");
+
+  // Reset opacity and re-display the slideshow
+  slideshowContainer.style.opacity = 1;
+  slideshowContainer.style.display = "flex";
+  dotsContainer.style.opacity = 1;
+  dotsContainer.style.display = "block";
+
+  // Start the slideshow from the beginning
+  showSlides();
+}
+
+// Add click event listener to the final message container
+finalMessageContainer.addEventListener('click', restartSlideshow);
+</script>
+</body>
+</html>
